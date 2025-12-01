@@ -2,6 +2,7 @@
 
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLogin } from "@/hooks/Auth/useLogin";
 import { LoginFormSchema, LoginFormSchemaType } from "@/utils/loginForm.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -10,15 +11,18 @@ export const LoginForm = () => {
   const {
     register,
     handleSubmit,
-    control,
     reset,
     formState: { errors },
   } = useForm<LoginFormSchemaType>({
     resolver: zodResolver(LoginFormSchema),
     mode: "onChange",
   });
+  const login = useLogin();
 
-  const onSubmit = (data: LoginFormSchemaType) => {};
+  const onSubmit = (data: LoginFormSchemaType) => {
+    login.mutate(data);
+    reset();
+  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
