@@ -45,8 +45,8 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (e) {
-    // @ts-expect-error i dont know the type
     return NextResponse.json(
+      // @ts-expect-error i dont know the type
       { success: false, message: e.message },
       { status: 500 },
     );
