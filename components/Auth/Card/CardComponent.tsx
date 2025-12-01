@@ -10,6 +10,7 @@ import {
 import { RegisterForm } from "../AuthForm/RegisterForm";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
+import { LoginForm } from "../AuthForm/LoginForm";
 
 export const CardComponent = ({
   title,
@@ -23,14 +24,16 @@ export const CardComponent = ({
   type: string;
 }) => {
   return (
-    <ScrollArea className="h-[70vh] w-lg shadow-2xl rounded-md">
+    <ScrollArea
+      className={`${type === "register" ? "h-[70vh]" : ""} w-lg shadow-2xl rounded-md`}
+    >
       <Card className="w-full max-w-lg z-999 overflow-auto border-none">
         <CardHeader>
           <CardTitle>{title}</CardTitle>
           <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <RegisterForm />
+          {type === "register" ? <RegisterForm /> : <LoginForm />}
         </CardContent>
         <CardFooter className="flex justify-center">
           {footer}
