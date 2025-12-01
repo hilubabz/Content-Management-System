@@ -64,11 +64,7 @@ export const MainSidebar = ({
   const router = useRouter();
 
   useEffect(() => {
-    if (
-      userData.isError &&
-      axios.isAxiosError(userData.error) &&
-      userData.error.response?.status === 401
-    ) {
+    if (!userData.isLoading && userData.data.message === "Unauthorized") {
       router.push("/login");
     }
   }, [userData]);
@@ -118,14 +114,14 @@ export const MainSidebar = ({
           <div className="flex flex-col items-center">
             <div className="h-15 w-15 rounded-full bg-gray-500 relative overflow-hidden">
               <Image
-                src={userData.data?.data.profilePicture}
+                src={userData.data?.data?.profilePicture}
                 alt="profilePicture"
                 fill
               />
             </div>
-            <div className="text-sm">{userData.data?.data.name}</div>
+            <div className="text-sm">{userData.data?.data?.name}</div>
             <div className="text-sm text-gray-500">
-              @{userData.data?.data.username}
+              @{userData.data?.data?.username}
             </div>
             <div onClick={handleLogout} className="cursor-pointer">
               Logout
