@@ -18,7 +18,7 @@ export const useLogin = () => {
 
       if (data.success) {
         toast.success("Login Successful");
-        router.push("/");
+        router.push("/dashboard");
       } else {
         toast.error(data.message);
       }
