@@ -1,5 +1,6 @@
 import { apiRoutes } from "@/app/apis/apiRoutes";
 import { axiosInstance } from "@/app/apis/axiosInstance";
+import axios from "axios";
 
 interface DataType {
   username: string;
@@ -7,6 +8,12 @@ interface DataType {
 }
 
 export const loginFunction = async (data: DataType) => {
-  const res = await axiosInstance.post(apiRoutes.LOGIN, data);
-  return res.data;
+  try {
+    const res = await axiosInstance.post(apiRoutes.LOGIN, data);
+    return res.data;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      return e.response?.data;
+    }
+  }
 };
