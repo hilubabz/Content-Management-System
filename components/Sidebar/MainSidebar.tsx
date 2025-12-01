@@ -1,15 +1,4 @@
-import {
-  BookText,
-  Calendar,
-  Home,
-  Inbox,
-  Layers,
-  LayoutDashboard,
-  Search,
-  Settings,
-  User,
-  Wrench,
-} from "lucide-react";
+import { BookText, Layers, LayoutDashboard, User, Wrench } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -21,10 +10,47 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "../ui/sidebar";
-import { Button } from "../ui/button";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import { useGetUser } from "@/hooks/Sidebar/useGetUser";
+import Image from "next/image";
+import { useLogout } from "@/hooks/Auth/useLogout";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+
+const items = [
+  {
+    title: "Dashboard",
+    key: "dashboard",
+    icon: LayoutDashboard,
+    link: "/dashboard",
+  },
+  {
+    title: "Story Management",
+    key: "story",
+    icon: BookText,
+    link: "/story/addStory",
+  },
+  {
+    title: "Priority Management",
+    key: "priority",
+    icon: Layers,
+    link: "/priority",
+  },
+  {
+    title: "Tools",
+    key: "tools",
+    icon: Wrench,
+    link: "/tools/categoryManagement",
+  },
+  {
+    title: "User Management",
+    key: "user",
+    icon: User,
+    link: "/tools/userAccessManagement",
+  },
+];
 
 export const MainSidebar = ({
   setActive,
@@ -32,39 +58,28 @@ export const MainSidebar = ({
   setActive: Dispatch<SetStateAction<string>>;
 }) => {
   const path = usePathname();
-  console.log(path);
-  const items = [
-    {
-      title: "Dashboard",
-      key: "dashboard",
-      icon: LayoutDashboard,
-      link: "/dashboard",
-    },
-    {
-      title: "Story Management",
-      key: "story",
-      icon: BookText,
-      link: "/story/addStory",
-    },
-    {
-      title: "Priority Management",
-      key: "priority",
-      icon: Layers,
-      link: "/priority",
-    },
-    {
-      title: "Tools",
-      key: "tools",
-      icon: Wrench,
-      link: "/tools/categoryManagement",
-    },
-    {
-      title: "User Management",
-      key: "user",
-      icon: User,
-      link: "/tools/userAccessManagement",
-    },
-  ];
+  const userData = useGetUser();
+  console.log(userData);
+  const logout = useLogout();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (
+      userData.isError &&
+      axios.isAxiosError(userData.error) &&
+      userData.error.response?.status === 401
+    ) {
+      router.push("/login");
+    }
+  }, [userData]);
+
+  const handleLogout = () => {
+    logout.mutate();
+  };
+
+  // if(userData.data.message==='Unauthorized'){
+  //   router.push('/')
+  // }
 
   return (
     <Sidebar className="w-[150px] ">
@@ -97,10 +112,26 @@ export const MainSidebar = ({
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="bg-black text-white w-[150px] pb-2">
-        <div className="flex flex-col items-center">
-          <div className="h-15 w-15 rounded-full bg-gray-500"></div>
-          <div>Logout</div>
-        </div>
+        {userData.isLoading ? (
+          <div></div>
+        ) : (
+          <div className="flex flex-col items-center">
+            <div className="h-15 w-15 rounded-full bg-gray-500 relative overflow-hidden">
+              <Image
+                src={userData.data?.data.profilePicture}
+                alt="profilePicture"
+                fill
+              />
+            </div>
+            <div className="text-sm">{userData.data?.data.name}</div>
+            <div className="text-sm text-gray-500">
+              @{userData.data?.data.username}
+            </div>
+            <div onClick={handleLogout} className="cursor-pointer">
+              Logout
+            </div>
+          </div>
+        )}
       </SidebarFooter>
     </Sidebar>
   );
