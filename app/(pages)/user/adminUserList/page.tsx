@@ -1,11 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { RegisterForm } from "@/components/Auth/AuthForm/RegisterForm";
 import { Input } from "@/components/ui/input";
+import { AddAdminDialog } from "@/components/User/AdminUserList/AddAdminDialog";
 import { AdminUserListTable } from "@/components/User/AdminUserList/AdminUserListTable";
 import { useFetchAllUser } from "@/hooks/User/useFetchAllUser";
 import { Search } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface DataType {
   _id: string;
@@ -20,6 +21,7 @@ interface DataType {
 export default function Page() {
   const { data, isLoading } = useFetchAllUser();
   const authorized = !isLoading && data?.message !== "Unauthorized";
+  const [open, setOpen] = useState(false);
   const filteredData =
     !isLoading && data?.message !== "Unauthorized"
       ? data.data.filter((val: DataType) => val.role === "admin")
@@ -42,7 +44,9 @@ export default function Page() {
             />
             <Search />
           </div>
-          <Button className="bg-blue-900 text-white">+ Add Admin</Button>
+          <AddAdminDialog open={open} setOpen={setOpen}>
+            <RegisterForm isAdmin={true} setOpen={setOpen} />
+          </AddAdminDialog>
         </div>
       </div>
 

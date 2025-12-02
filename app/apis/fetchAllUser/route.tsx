@@ -37,8 +37,8 @@ export async function GET(request: NextRequest) {
       );
     }
   } catch (e) {
-    // @ts-expect-error i dont know the type
     return NextResponse.json(
+      // @ts-expect-error i dont know the type
       { success: false, message: e.message },
       { status: 500 },
     );

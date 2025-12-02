@@ -4,16 +4,23 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRegister } from "@/hooks/Auth/useRegister";
+import { useRegisterAdmin } from "@/hooks/Auth/useRegisterAdmin";
 import {
   RegisterFormSchema,
   RegisterFormSchemaType,
 } from "@/utils/registerForm.zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 
-export const RegisterForm = () => {
+export const RegisterForm = ({
+  isAdmin,
+  setOpen,
+}: {
+  isAdmin: boolean;
+  setOpen?: Dispatch<SetStateAction<boolean>>;
+}) => {
   const {
     register,
     handleSubmit,
@@ -28,6 +35,7 @@ export const RegisterForm = () => {
   const [previewUrl, setPreviewUrl] = useState<string>("");
   const imageRef = useRef<HTMLInputElement>(null);
   const registerUser = useRegister();
+  const registerAdmin = useRegisterAdmin();
 
   const onSubmit = (data: RegisterFormSchemaType) => {
     const formData = new FormData();
@@ -36,8 +44,23 @@ export const RegisterForm = () => {
     formData.append("username", data.username);
     formData.append("password", data.password);
     formData.append("profilePicture", data.profilePicture);
-    registerUser.mutate(formData);
-    reset();
+    formData.append("role", isAdmin ? "admin" : "user");
+    isAdmin
+      ? registerAdmin.mutate(formData, {
+          onSuccess: (data) => {
+            if (setOpen && data.success) {
+              setOpen(false);
+              reset();
+              setPreviewUrl("");
+            }
+          },
+        })
+      : registerUser.mutate(formData, {
+          onSuccess: () => {
+            reset();
+            setPreviewUrl("");
+          },
+        });
   };
 
   return (

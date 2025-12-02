@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
     const username = formData.get("username") as string;
     const password = formData.get("password") as string;
     const file = formData.get("profilePicture") as File;
+    const role = formData.get("role") as string;
 
     if (!file) {
       return NextResponse.json(
@@ -70,7 +71,7 @@ export async function POST(req: NextRequest) {
       username,
       password: hashedPassword,
       profilePicture: uploaded.secure_url,
-      role: "user",
+      role,
     });
 
     return NextResponse.json(

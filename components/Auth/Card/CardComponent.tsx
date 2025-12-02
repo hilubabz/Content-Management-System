@@ -33,7 +33,11 @@ export const CardComponent = ({
           <CardDescription>{description}</CardDescription>
         </CardHeader>
         <CardContent>
-          {type === "register" ? <RegisterForm /> : <LoginForm />}
+          {type === "register" ? (
+            <RegisterForm isAdmin={false} />
+          ) : (
+            <LoginForm />
+          )}
         </CardContent>
         <CardFooter className="flex justify-center">
           {footer}
