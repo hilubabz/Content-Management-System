@@ -17,7 +17,6 @@ import { useGetUser } from "@/hooks/Sidebar/useGetUser";
 import Image from "next/image";
 import { useLogout } from "@/hooks/Auth/useLogout";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 
 const items = [
   {
@@ -59,7 +58,6 @@ export const MainSidebar = ({
 }) => {
   const path = usePathname();
   const userData = useGetUser();
-  console.log(userData);
   const logout = useLogout();
   const router = useRouter();
 
@@ -72,10 +70,6 @@ export const MainSidebar = ({
   const handleLogout = () => {
     logout.mutate();
   };
-
-  // if(userData.data.message==='Unauthorized'){
-  //   router.push('/')
-  // }
 
   return (
     <Sidebar className="w-[150px] ">
