@@ -70,6 +70,7 @@ export async function POST(req: NextRequest) {
       username,
       password: hashedPassword,
       profilePicture: uploaded.secure_url,
+      role: "user",
     });
 
     return NextResponse.json(
