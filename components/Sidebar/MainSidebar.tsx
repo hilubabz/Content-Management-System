@@ -47,7 +47,7 @@ const items = [
     title: "User Management",
     key: "user",
     icon: User,
-    link: "/tools/userAccessManagement",
+    link: "/user/userAccessManagement",
   },
 ];
 

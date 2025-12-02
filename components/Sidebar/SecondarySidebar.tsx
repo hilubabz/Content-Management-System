@@ -14,9 +14,21 @@ export const SecondarySidebar = ({ active }: { active: string | null }) => {
       <div className="p-4">
         {active === "user" && (
           <div className="flex flex-col gap-5 pt-3">
-            <div>User Access Management</div>
-            <div>Admin User List</div>
-            <div>Users</div>
+            <div
+              className={`${path == "/user/userAccessManagement" ? "bg-gray-700 " : ""} rounded-lg px-2 py-1 text-[15px]`}
+            >
+              User Access Management
+            </div>
+            <div
+              className={`${path == "/user/adminUserList" ? "bg-gray-700 " : ""} rounded-lg px-2 py-1 text-[15px]`}
+            >
+              Admin User List
+            </div>
+            <div
+              className={`${path == "/user/users" ? "bg-gray-700 " : ""} rounded-lg px-2 py-1 text-[15px]`}
+            >
+              Users
+            </div>
           </div>
         )}
 
