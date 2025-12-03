@@ -6,7 +6,14 @@ export const useAddStory = () => {
   const data = useMutation({
     mutationKey: ["addStory"],
     mutationFn: addStory,
-    onSuccess: (data) => {
+    onMutate: () => {
+      return { toastId: toast.loading("Uploading Post") };
+    },
+    onSuccess: (data, variables, context) => {
+      if (context?.toastId) {
+        toast.dismiss(context.toastId);
+      }
+
       if (data.success) {
         toast.success(data.message);
       } else {

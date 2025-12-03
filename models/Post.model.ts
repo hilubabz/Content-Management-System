@@ -12,7 +12,7 @@ const postSchema = new mongoose.Schema(
     imageCaption: { type: String, required: true },
     imageCredit: { type: String, required: true },
     pdfFile: { type: String, required: true },
-    verifiedBy: { type: String, required: false },
+    verifiedBy: { type: mongoose.Types.ObjectId, required: true, ref: "User" },
     verifiedAt: { type: Date, required: false },
     status: {
       type: String,
