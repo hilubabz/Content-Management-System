@@ -1,8 +1,5 @@
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
-import { SelectComponent } from "./SelectComponent";
-
-const data = ["All", "Published", "Pending", "Planned", "Reject"];
 
 export const TopNav = () => {
   return (
@@ -16,7 +13,6 @@ export const TopNav = () => {
           />
           <Search />
         </div>
-        <SelectComponent data={data} defaultValue="all" />
       </div>
     </div>
   );

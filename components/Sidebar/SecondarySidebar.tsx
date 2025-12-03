@@ -50,10 +50,10 @@ export const SecondarySidebar = ({ active }: { active: string | null }) => {
               View Story
             </Link>
             <Link
-              href={"/story/viewScheduleStory"}
-              className={`${path == "/story/viewScheduleStory" ? "bg-gray-700 " : ""} rounded-lg px-2 py-1`}
+              href={"/story/verifyStory"}
+              className={`${path == "/story/verifyStory" ? "bg-gray-700 " : ""} rounded-lg px-2 py-1`}
             >
-              View Schedule Story
+              Verify Story
             </Link>
             <Link
               href={"/story/pdfList"}

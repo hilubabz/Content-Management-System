@@ -11,9 +11,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export const DatePicker = () => {
+export const DatePicker = ({
+  date,
+  setDate,
+}: {
+  date: Date;
+  setDate: (u: Date) => void;
+}) => {
   const [open, setOpen] = React.useState(false);
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
 
   return (
     <div className="flex flex-col gap-3">
@@ -33,8 +38,9 @@ export const DatePicker = () => {
             mode="single"
             selected={date}
             captionLayout="dropdown"
+            disabled={{ after: new Date() }}
             onSelect={(date) => {
-              setDate(date);
+              setDate(date as Date);
               setOpen(false);
             }}
           />

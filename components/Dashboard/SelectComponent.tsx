@@ -9,20 +9,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { useStatus } from "@/context/Dashboard/StatusContext";
 
 export const SelectComponent = ({
   data,
   defaultValue,
   control,
+  setStatus,
 }: {
   data: string[];
   defaultValue: string;
   //eslint-disable-next-line
   control?: Control<any>;
+  setStatus?: (u: string) => void;
 }) => {
   if (!control) {
     return (
-      <Select defaultValue={defaultValue}>
+      <Select
+        defaultValue={defaultValue}
+        onValueChange={(value) => {
+          if (setStatus) setStatus(value.toLowerCase());
+        }}
+      >
         <SelectTrigger className="w-[180px]">
           <SelectValue />
         </SelectTrigger>
