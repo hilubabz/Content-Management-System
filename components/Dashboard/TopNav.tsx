@@ -1,12 +1,7 @@
 import { Search } from "lucide-react";
 import { Input } from "../ui/input";
-import { SelectComponent } from "./SelectComponent";
-import { useStatus } from "@/context/Dashboard/StatusContext";
-
-const data = ["All", "Published", "Pending", "Planned", "Reject"];
 
 export const TopNav = () => {
-  const { setStatus } = useStatus();
   return (
     <div className="flex justify-between py-5 border-b">
       <div className="text-lg font-semibold text-blue-700">Dashboard</div>
@@ -18,7 +13,6 @@ export const TopNav = () => {
           />
           <Search />
         </div>
-        <SelectComponent data={data} defaultValue="all" setStatus={setStatus} />
       </div>
     </div>
   );

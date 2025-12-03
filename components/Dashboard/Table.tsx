@@ -1,14 +1,13 @@
 "use client";
 
 import { useStatus } from "@/context/Dashboard/StatusContext";
-import { formatDate } from "@/lib/formatDate";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 
 interface AuthorType {
   _id: string;
@@ -28,27 +27,31 @@ interface DataType {
 
 export const Table = ({ tableData }: { tableData: DataType[] }) => {
   const { status, category, startDate, endDate, getData } = useStatus();
-  console.log(startDate, endDate);
+  console.log(status);
   const initialData = useMemo(() => {
     if (status === "all") return tableData;
-
-    return tableData.filter(
-      (val) => val.status.toLowerCase() === status.toLowerCase(),
-    );
+    else
+      return tableData.filter(
+        (val) => val.status.toLowerCase() === status.toLowerCase(),
+      );
   }, [tableData, status]);
 
   const data = useMemo(() => {
     if (category === "all" && startDate && endDate)
       return initialData.filter(
         (val) =>
-          formatDate(val.createdAt) >= formatDate(startDate as Date) &&
-          formatDate(val.createdAt) <= formatDate(endDate as Date),
+          new Date(val.createdAt).setHours(0, 0, 0, 0) >=
+            new Date(startDate as Date).setHours(0, 0, 0, 0) &&
+          new Date(val.createdAt).setHours(0, 0, 0, 0) <=
+            new Date(endDate as Date).setHours(0, 0, 0, 0),
       );
     else if (category !== "all" && startDate && endDate)
       return initialData.filter(
         (val) =>
-          formatDate(val.createdAt) >= formatDate(startDate as Date) &&
-          formatDate(val.createdAt) <= formatDate(endDate as Date) &&
+          new Date(val.createdAt).setHours(0, 0, 0, 0) >=
+            new Date(startDate as Date).setHours(0, 0, 0, 0) &&
+          new Date(val.createdAt).setHours(0, 0, 0, 0) <=
+            new Date(endDate as Date).setHours(0, 0, 0, 0) &&
           val.category === category,
       );
     else return initialData;
@@ -65,7 +68,9 @@ export const Table = ({ tableData }: { tableData: DataType[] }) => {
     columnHelper.accessor("category", { header: "Category" }),
     columnHelper.accessor("createdAt", {
       header: "Publish Date",
-      cell: (info) => <div>{formatDate(info.getValue())}</div>,
+      cell: (info) => (
+        <div>{new Date(info.getValue()).toLocaleDateString()}</div>
+      ),
     }),
     columnHelper.accessor("verifiedBy", {
       header: "Verified By",

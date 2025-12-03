@@ -3,10 +3,10 @@ import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { DatePicker } from "./DatePicker";
 import { SelectComponent } from "./SelectComponent";
-import { useState } from "react";
 import { toast } from "sonner";
 
 const data = ["All", "Story", "News", "Blog", "Food", "Biography"];
+const statusData = ["All", "Published", "Pending", "Planned", "Reject"];
 
 export const Filter = () => {
   const {
@@ -15,6 +15,7 @@ export const Filter = () => {
     setStartDate,
     setEndDate,
     setCategory,
+    setStatus,
     getData,
     setGetData,
   } = useStatus();
@@ -45,6 +46,14 @@ export const Filter = () => {
           data={data}
           defaultValue="all"
           setStatus={setCategory}
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="type">Status</Label>
+        <SelectComponent
+          data={statusData}
+          defaultValue="all"
+          setStatus={setStatus}
         />
       </div>
       <Button
