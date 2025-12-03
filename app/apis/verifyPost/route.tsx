@@ -3,9 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import Post from "@/models/Post.model";
 
-export async function GET(request: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     await dbConnect();
+    const { id, verified } = await request.json();
     const token = request.cookies.get("token")?.value;
     if (!token) {
       return NextResponse.json(
@@ -22,21 +23,23 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const postData = await Post.find()
-      .populate("author", "_id name profilePicture")
-      .populate("verifiedBy", "_id name profilePicture");
-    if (postData) {
+    const updatedPost = await Post.findByIdAndUpdate(
+      id,
+      {
+        verifiedBy: decoded.id,
+        status: verified ? "published" : "reject",
+      },
+      { new: true },
+    );
+
+    if (updatedPost) {
       return NextResponse.json(
-        {
-          success: true,
-          message: "Posts fetched successfully",
-          data: postData,
-        },
+        { success: true, message: "Post verified successfully" },
         { status: 200 },
       );
     } else {
       return NextResponse.json(
-        { success: false, message: "Failed to fetch posts" },
+        { success: false, message: "Failed to verify post" },
         { status: 400 },
       );
     }

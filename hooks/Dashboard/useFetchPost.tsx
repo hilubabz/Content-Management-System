@@ -1,3 +1,5 @@
+"use client";
+
 import { fetchPost } from "@/lib/Dashboard/fetchPost";
 import { useQuery } from "@tanstack/react-query";
 

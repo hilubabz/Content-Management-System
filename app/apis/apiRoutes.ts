@@ -6,4 +6,5 @@ export const apiRoutes = {
   FETCH_ALL_USERS: "fetchAllUser",
   ADD_POST: "addPost",
   FETCH_POST: "fetchPost",
+  VERIFY_POST: "verifyPost",
 };

@@ -20,7 +20,7 @@ interface DataType {
   articleTitle: string;
   createdAt: string;
   author: AuthorType;
-  verifiedBy: string;
+  verifiedBy: AuthorType;
   category: string;
   status: string;
 }
@@ -76,8 +76,8 @@ export const Table = ({ tableData }: { tableData: DataType[] }) => {
       header: "Verified By",
       cell: (info) => {
         console.log(info.getValue());
-        if (info.getValue() != "") {
-          return <div>{info.getValue()}</div>;
+        if (info.getValue()?.name) {
+          return <div>{info.getValue()?.name}</div>;
         } else {
           return <div>-</div>;
         }

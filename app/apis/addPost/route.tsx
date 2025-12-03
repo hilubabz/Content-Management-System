@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Post from "@/models/Post.model";
 import { v2 as cloudinary } from "cloudinary";
 import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -81,7 +82,7 @@ export async function POST(request: NextRequest) {
       imageCredit,
       pdfFile: pdfUrl,
       author: decoded.id,
-      verifiedBy: "",
+      verifiedBy: new mongoose.Types.ObjectId(),
       verifiedAt: null,
       status: "pending",
     });
