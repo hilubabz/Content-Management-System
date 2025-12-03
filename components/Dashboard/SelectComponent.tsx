@@ -15,18 +15,21 @@ export const SelectComponent = ({
   data,
   defaultValue,
   control,
+  setStatus,
 }: {
   data: string[];
   defaultValue: string;
   //eslint-disable-next-line
   control?: Control<any>;
+  setStatus?: (u: string) => void;
 }) => {
-  const { setStatus } = useStatus();
   if (!control) {
     return (
       <Select
         defaultValue={defaultValue}
-        onValueChange={(value) => setStatus(value.toLowerCase())}
+        onValueChange={(value) => {
+          if (setStatus) setStatus(value.toLowerCase());
+        }}
       >
         <SelectTrigger className="w-[180px]">
           <SelectValue />

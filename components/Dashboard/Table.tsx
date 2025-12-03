@@ -1,13 +1,14 @@
 "use client";
 
 import { useStatus } from "@/context/Dashboard/StatusContext";
+import { formatDate } from "@/lib/formatDate";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 
 interface AuthorType {
   _id: string;
@@ -26,14 +27,33 @@ interface DataType {
 }
 
 export const Table = ({ tableData }: { tableData: DataType[] }) => {
-  const { status } = useStatus();
-  const data = useMemo(() => {
+  const { status, category, startDate, endDate, getData } = useStatus();
+  console.log(startDate, endDate);
+  const initialData = useMemo(() => {
     if (status === "all") return tableData;
 
     return tableData.filter(
       (val) => val.status.toLowerCase() === status.toLowerCase(),
     );
   }, [tableData, status]);
+
+  const data = useMemo(() => {
+    if (category === "all" && startDate && endDate)
+      return initialData.filter(
+        (val) =>
+          formatDate(val.createdAt) >= formatDate(startDate as Date) &&
+          formatDate(val.createdAt) <= formatDate(endDate as Date),
+      );
+    else if (category !== "all" && startDate && endDate)
+      return initialData.filter(
+        (val) =>
+          formatDate(val.createdAt) >= formatDate(startDate as Date) &&
+          formatDate(val.createdAt) <= formatDate(endDate as Date) &&
+          val.category === category,
+      );
+    else return initialData;
+  }, [getData, tableData]);
+
   const columnHelper = createColumnHelper<DataType>();
   const columns = [
     columnHelper.accessor("_id", { header: "ID" }),
@@ -45,9 +65,7 @@ export const Table = ({ tableData }: { tableData: DataType[] }) => {
     columnHelper.accessor("category", { header: "Category" }),
     columnHelper.accessor("createdAt", {
       header: "Publish Date",
-      cell: (info) => (
-        <div>{new Date(info.getValue()).toLocaleDateString()}</div>
-      ),
+      cell: (info) => <div>{formatDate(info.getValue())}</div>,
     }),
     columnHelper.accessor("verifiedBy", {
       header: "Verified By",
