@@ -1,46 +1,67 @@
 "use client";
 
+import { useStatus } from "@/context/Dashboard/StatusContext";
 import {
   createColumnHelper,
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { useMemo } from "react";
 
-const data = [
-  {
-    id: 12345,
-    title: "Hello there",
-    publishDate: "2025-10-20",
-    author: "Utsarga",
-    verifiedBy: "Utsarga",
-    category: "story",
-    status: "verified",
-  },
-];
+interface AuthorType {
+  _id: string;
+  name: string;
+  profilePicture: string;
+}
 
 interface DataType {
-  id: number;
-  title: string;
-  publishDate: string;
-  author: string;
+  _id: number;
+  articleTitle: string;
+  createdAt: string;
+  author: AuthorType;
   verifiedBy: string;
   category: string;
   status: string;
 }
 
-export const Table = () => {
+export const Table = ({ tableData }: { tableData: DataType[] }) => {
+  const { status } = useStatus();
+  const data = useMemo(() => {
+    if (status === "all") return tableData;
+
+    return tableData.filter(
+      (val) => val.status.toLowerCase() === status.toLowerCase(),
+    );
+  }, [tableData, status]);
   const columnHelper = createColumnHelper<DataType>();
   const columns = [
-    columnHelper.accessor("id", { header: "ID" }),
-    columnHelper.accessor("title", { header: "Title" }),
-    columnHelper.accessor("author", { header: "Author" }),
+    columnHelper.accessor("_id", { header: "ID" }),
+    columnHelper.accessor("articleTitle", { header: "Title" }),
+    columnHelper.accessor("author", {
+      header: "Author",
+      cell: (info) => <div>{info.getValue().name}</div>,
+    }),
     columnHelper.accessor("category", { header: "Category" }),
-    columnHelper.accessor("publishDate", { header: "Publish Date" }),
-    columnHelper.accessor("verifiedBy", { header: "Verified By" }),
+    columnHelper.accessor("createdAt", {
+      header: "Publish Date",
+      cell: (info) => (
+        <div>{new Date(info.getValue()).toLocaleDateString()}</div>
+      ),
+    }),
+    columnHelper.accessor("verifiedBy", {
+      header: "Verified By",
+      cell: (info) => {
+        console.log(info.getValue());
+        if (info.getValue() != "") {
+          return <div>{info.getValue()}</div>;
+        } else {
+          return <div>-</div>;
+        }
+      },
+    }),
     columnHelper.accessor("status", { header: "Status" }),
   ];
-
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     columns,

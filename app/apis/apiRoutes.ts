@@ -5,4 +5,5 @@ export const apiRoutes = {
   LOGOUT: "logout",
   FETCH_ALL_USERS: "fetchAllUser",
   ADD_POST: "addPost",
+  FETCH_POST: "fetchPost",
 };
